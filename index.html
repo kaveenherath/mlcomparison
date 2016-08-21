@@ -1,0 +1,181 @@
+---
+layout: page
+title:
+permalink: /vis/
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://d3js.org/d3.v2.min.js"></script>
+
+<style>
+hr {
+    clear: both;
+    visibility: hidden;
+}
+
+#real, #ll, #nb, #knn, #dt{
+  background: #DDDDDD;
+  border: 1px #DDDDDD solid;
+}
+
+</style>
+
+</head>
+
+<body>
+
+  <div  style="float:left; display: inline-block; " id="real"></div>
+  <div  style="float:right; display: inline-block;">
+      <h4>ML Classifier Comparison</h4>
+      Dataset: <a href="https://archive.ics.uci.edu/ml/datasets/Pima+Indians+Diabetes"> Pima Indians Diabetes</a>
+
+  </div>
+  <br/>
+  <hr/>
+  <br/>
+  <div  style="float:left;"> Linear SVM  0.4</div>
+  <div  style="float:right;"> K Nearest Neighbors  0.93</div>
+  <hr>
+  <div  style="float:left; display: inline-block;"  id="ll"></div>
+  <div  style="float:right; display: inline-block;"  id="knn"></div>
+  <br/>
+  <hr/>
+  <br/>
+  <div  style="float:left;"> Decision Trees  1.0</div>
+  <div  style="float:right;"> Naive Bayes  0.83</div>
+  <hr>
+  <div  style="float:left; display: inline-block;"  id="dt"></div>
+  <div  style="float:right; display: inline-block;"  id="nb"></div>
+
+
+  <script>
+
+
+  function getColor(x) {
+    if(x == 1)
+      return "#85144b";
+    return "#7FDBFF";
+  }
+
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+
+  var real = d3.select("#real")
+            .append("svg")
+            .attr("width", h/3)
+            .attr("height", h/3);
+
+
+  var ll = d3.select("#ll")
+            .append("svg")
+            .attr("width", h/3)
+            .attr("height", h/3);
+
+  var knn = d3.select("#knn")
+            .append("svg")
+            .attr("width", h/3)
+            .attr("height", h/3);
+
+  var dt = d3.select("#dt")
+            .append("svg")
+            .attr("width", h/3)
+            .attr("height", h/3);
+
+  var nb = d3.select("#nb")
+            .append("svg")
+            .attr("width", h/3)
+            .attr("height", h/3);
+
+
+  var xScale = d3.scale.linear().domain([-1,10]).range([0,300]);
+  var yScale = d3.scale.linear().domain([50,200]).range([0,300]);
+  //
+  //var scaleV1 = d3.scale.linear();
+
+  d3.csv("data.csv", function(data) {
+
+    real.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) {
+          return xScale(d["x"]);
+      })
+      .attr("cy", function(d) {
+          return yScale(d["y"]);
+      })
+      .attr("r", 5)
+      .style("fill", function(d) {
+        return getColor(d["true"]);
+      });
+
+    ll.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) {
+          return xScale(d["x"]);
+      })
+      .attr("cy", function(d) {
+          return yScale(d["y"]);
+      })
+      .attr("r", 5)
+      .style("fill", function(d) {
+        return getColor(d["ll"]);
+      });
+
+    knn.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) {
+          return xScale(d["x"]);
+      })
+      .attr("cy", function(d) {
+          return yScale(d["y"]);
+      })
+      .attr("r", 5)
+      .style("fill", function(d) {
+        return getColor(d["knn"]);
+      });
+
+    dt.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) {
+          return xScale(d["x"]);
+      })
+      .attr("cy", function(d) {
+          return yScale(d["y"]);
+      })
+      .attr("r", 5)
+      .style("fill", function(d) {
+        return getColor(d["dt"]);
+      });
+
+
+    nb.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) {
+          return xScale(d["x"]);
+      })
+      .attr("cy", function(d) {
+          return yScale(d["y"]);
+      })
+      .attr("r", 5)
+      .style("fill", function(d) {
+        return getColor(d["nb"]);
+      });
+
+});
+
+
+  </script>
+
+</body>
+</html>
